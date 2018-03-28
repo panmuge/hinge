@@ -8,5 +8,7 @@
 
 return [
     "img_prefix"=>"http://fuck_tp.io/images",
+    "product"=>"http://fuck_tp.io/api/v1/product/",
+    "theme"=>"http://fuck_tp.io/api/v1/theme/",
     "token_expire_in"=>7200
 ];

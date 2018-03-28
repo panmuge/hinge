@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Banner列表</title>
-    <link rel="shortcut icon" href="favicon.ico">
+    <title>Banner列表图片</title>
+    <!-- <link rel="shortcut icon" href="favicon.ico"> -->
     <link href="__CSS__/bootstrap.min.css?v=3.3.6" rel="stylesheet">
     <link href="__CSS__/font-awesome.min.css?v=4.4.0" rel="stylesheet">
     <link href="__CSS__/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
@@ -24,7 +24,7 @@
             <div class="ibox-content">
                 <div class="form-group clearfix col-sm-1">
                     {if authCheck('banner/banneritemadd') }
-                    <a href="{:url('banner/banneritemadd')}">
+                    <a href="{:url('banner/banneritemadd/'.{$bannerid})}">
                         <button class="btn btn-outline btn-primary" type="button">添加轮播图</button>
                     </a>
                     {/if}
@@ -48,10 +48,10 @@
                     <div class="example">
                         <table id="cusTable">
                             <thead>
-                                <th data-field="id">BannerID</th>
+                                <th data-field="name">名称</th>
                                 <th data-field="thumbnail">缩略图</th>
-                                <th data-field="type">类型</th>
-                                <th data-field="key_word">地址</th>
+                                <th data-field="type">导向</th>
+                                <th data-field="key_word">导向地址</th>
                                 <!-- <th data-field="status">状态</th> -->
                                 <th data-field="operate">操作</th>
                             </thead>
@@ -83,7 +83,7 @@
                 method: "get",  //使用get请求到服务器获取数据
                 url: "{:url('banner/banneritem')}", //获取数据的地址
                 striped: true,  //表格显示条纹
-                pagination: true, //启动分页
+                pagination: false, //启动分页
                 pageSize: 10,  //每页显示的记录数
                 pageNumber: 1, //当前第几页
                 pageList: [5, 10, 15, 20, 25],  //记录数可选列表
@@ -96,9 +96,9 @@
                 queryParams: function queryParams(params) {   //设置查询参数
                     var param = {
                         id:'{$bannerid}',
-                        pageNumber: params.pageNumber,
-                        pageSize: params.pageSize,
-                        searchText: $('#name').val()
+                        // pageNumber: params.pageNumber,
+                        // pageSize: params.pageSize,
+                        // searchText: $('#name').val()
                     };
                     return param;
                 },
@@ -119,7 +119,7 @@
             initTable();
 
             //当点击查询按钮的时候执行
-            $("#search").bind("click", initTable);
+            // $("#search").bind("click", initTable);
         });
 
         function bannerDel(id) {

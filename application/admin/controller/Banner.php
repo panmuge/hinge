@@ -2,13 +2,14 @@
 namespace app\admin\controller;
 
 use app\admin\model\BannerModel;
-use app\admin\model\BannerItemModel;
+// use app\admin\model\BannerItemModel;
 use app\admin\validate\BannerValidate;
 use app\admin\validate\IDMustBePositiveInt;
 class Banner extends Base
 {
     //查询已经存在banner
-    public function index(){
+    public function index()
+    {
         if(request()->isAjax()){
             $param = input('param.');
 
@@ -37,7 +38,8 @@ class Banner extends Base
         return $this->fetch();
     }
 
-    public function bannerAdd(){
+    public function bannerAdd()
+    {
         //添加操作
         if(request()->isPost()){
             //数据验证
@@ -52,49 +54,45 @@ class Banner extends Base
         return $this->fetch();
     }
     //添加banner
-    public function save(){
+    public function save()
+    {
 
     }
     //修改
-    public function bannerEdit(){
+    public function bannerEdit()
+    {
         return true;
     }
     //删除
-    public function bannerDel(){
+    public function bannerDel()
+    {
         return true;
     }
 
     //banner-item操作
-    public function bannerItem(){
+    public function bannerItem()
+    {
         $id = input('param.id');
-
+        (new IDMustBePositiveInt())->goCheck();
         if(request()->isAjax()){
-            $param = input('param.');
-            $limit = $param['pageSize'];
-            $offset = ($param['pageNumber'] - 1) * $limit;
-            $id = $param['id'];
-            $where = [];
-            if (!empty($param['searchText'])) {
-                $where['name'] = ['like', '%' . $param['searchText'] . '%'];
-            }else{
 
-                $where['banner_id'] = $id;
+            $id = input('param.id');
 
-            }
+            $banner = new BannerModel();
+            $banner = $banner->getBannerByID($id);
 
-            $bannerItemModel = new BannerItemModel();
+            $data = $banner->toArray();
 
-            $selectResult = $bannerItemModel->getBannerItemByWhere($where, $offset, $limit);
-
+            $selectResult = $data['banner_item'];
             foreach($selectResult as $key=>$vo){
-                $vo = $vo->toArray();
-                
                 $selectResult[$key]['thumbnail'] = '<img src="' . config('seting.img_prefix') .$vo['image']['url'] . '" width="40px" height="40px">';
                 $selectResult[$key]['operate'] = showOperate($this->makeButton($vo['id']));
-
+                $selectResult[$key]['name'] = $data['name'];
             }
-
-            $return['total'] = $bannerItemModel->getCountBannerItem($where);  // 总数据
+            // var_dump($selectResult);die;
+            
+            $return['name'] = $data['name'];
+            $return['total'] = count($selectResult);  // 总数据
             $return['rows'] = $selectResult;
 
             return json($return);
@@ -105,21 +103,26 @@ class Banner extends Base
         return $this->fetch();
     }
     //添加
-    public function bannerItemAdd(){
+    public function bannerItemAdd()
+    {
         //验证数据
         (new IDMustBePositiveInt())->goCheck();
+        $id = input("param.id");
         if(request()->isAjax()){
             
         }
-        return $this->fetch();
+        var_dump($id);die;
+        // return $this->fetch();
     }
     //修改
-    public function bannerItemEdit(){
+    public function bannerItemEdit()
+    {
 
         return $this->fetch();
     }
     //删除
-    public function bannerItmeDel(){
+    public function bannerItmeDel()
+    {
 
     }
 

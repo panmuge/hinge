@@ -4,12 +4,13 @@ namespace app\admin\model;
 
 use think\Model;
 
-class BannerModel extends Model
+class BannerModel extends BaseModel
 {
     //表名称
     protected $table = "banner";
     //获取所有banner
-    public  function getBannerAll(){
+    public  function getBannerAll()
+    {
         $bannerall = $this->field('id,name,description')->select();
         return $bannerall;
     }
@@ -29,7 +30,8 @@ class BannerModel extends Model
     }
 
     //关联 banner_item
-    public function bannerItem(){
+    public function bannerItem()
+    {
         return $this->hasMany("BannerItemModel","banner_id","id");
     }
     //根据ID获取banner信息
@@ -39,7 +41,8 @@ class BannerModel extends Model
     /**
      *添加banner
      **/
-    public function addBanner($data){
+    public function addBanner($data)
+    {
         try{
             $result = $this->save($data);
             if(false === $result){

@@ -11,6 +11,7 @@
 
 
 namespace app\admin\validate;
+
 use app\lib\exception\ParameterException;
 use think\Exception;
 use think\Validate;

@@ -6,8 +6,7 @@
  * Time: 22:01
  */
 
-namespace app\api\validate;
-
+namespace app\admin\validate;
 
 class IDMustBePositiveInt extends BaseValidate
 {
