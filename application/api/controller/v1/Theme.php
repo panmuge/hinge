@@ -1,39 +1,41 @@
 <?php
+/**
+ * Created by 二虎哥哥.
+ * Author: 二虎哥哥
+ * QQ: 505120790
+ * Date: 2017/5/12
+ * Time: 22:17
+ */
 
 namespace app\api\controller\v1;
-use app\api\model\Theme as ThemeModel;
+
+
 use app\api\validate\IDCollection;
-use app\api\validate\IDMustBePositiveInt;
+use app\api\model\Theme as ThemeModel;
+use app\api\validate\IDMustBePostiveInt;
 use app\lib\exception\ThemeException;
 
 class Theme
 {
     /**
-     * 获取指定id的banner信息
-     * @url theme/ids?=id1,id2,id3......
-     * @http get
-     * @ids theme的一组id号
-     * @return 一组theme模型
+     * @url /theme?ids=id1,id2,id3,...
      */
     public function getSimpleList($ids=''){
         (new IDCollection())->goCheck();
-        $ids = explode(",",$ids);
-        $result = ThemeModel::with("topicImg,headImg")->field("id,name,description,topic_img_id,head_img_id")->select($ids);
-        if(empty($result)){
+        $ids = explode(',',$ids);
+        $result = ThemeModel::with('topicImg,headImg')->select($ids);
+        if ($result->isEmpty()){
             throw new ThemeException();
         }
-        return json($result);
+        return $result;
     }
 
-    public function getComplexOne($id){
-        //验证
-        (new IDMustBePositiveInt())->goCheck();
-        //获取数据
+    public function  getComplexOne($id){
+        (new IDMustBePostiveInt())->goCheck();
         $theme = ThemeModel::getThemeWithProducts($id);
-        if(empty($theme)){
+        if(!$theme){
             throw new ThemeException();
         }
-        return json($theme);
+        return $theme;
     }
-
 }

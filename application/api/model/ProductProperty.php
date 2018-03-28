@@ -1,9 +1,10 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2018/1/2
- * Time: 22:38
+ * Created by 二虎哥哥.
+ * Author: 二虎哥哥
+ * QQ: 505120790
+ * Date: 2017/5/24
+ * Time: 16:10
  */
 
 namespace app\api\model;
@@ -11,5 +12,5 @@ namespace app\api\model;
 
 class ProductProperty extends BaseModel
 {
-    protected $hidden = ['product_id'];
+    protected $hidden = ['id','delete_time','product_id'];
 }

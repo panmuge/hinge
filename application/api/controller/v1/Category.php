@@ -1,9 +1,10 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2017/12/30
- * Time: 22:50
+ * Created by 二虎哥哥.
+ * Author: 二虎哥哥
+ * QQ: 505120790
+ * Date: 2017/5/17
+ * Time: 22:02
  */
 
 namespace app\api\controller\v1;
@@ -14,10 +15,10 @@ use app\lib\exception\CategoryException;
 class Category
 {
     public function getAllCategories(){
-        $categories = CategoryModel::getCategories();
-        if(empty($categories)){
+        $categories = CategoryModel::all([],'img');
+        if ($categories->isEmpty()){
             throw new CategoryException();
         }
-        return json($categories);
+        return $categories;
     }
 }

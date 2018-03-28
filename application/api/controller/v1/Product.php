@@ -1,44 +1,53 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2017/12/30
- * Time: 21:19
+ * Created by 二虎哥哥.
+ * Author: 二虎哥哥
+ * QQ: 505120790
+ * Date: 2017/5/17
+ * Time: 20:33
  */
 
 namespace app\api\controller\v1;
 
 use app\api\model\Product as ProductModel;
+
 use app\api\validate\Count;
-use app\api\validate\IDMustBePositiveInt;
+use app\api\validate\IDMustBePostiveInt;
 use app\lib\exception\ProductException;
 
 class Product
 {
-    public function getRecent($count=20){
+    public function getRecent($count=15){
         (new Count())->goCheck();
-        $product = ProductModel::getMostRecent($count);
-        if(empty($product)){
+        $products = ProductModel::getMostRecent($count);
+        if($products->isEmpty()){
             throw new ProductException();
         }
-        return json($product);
+//        $collection = collection($products);
+        $products = $products->hidden(['summary']);
+        return $products;
     }
 
-    public function getAllInCategory($id){
-        (new IDMustBePositiveInt())->goCheck();
-        $products = ProductModel::getProductByCategoryID($id);
-        if(empty($products)){
+    public function getAllProductInCategory($id){
+        (new IDMustBePostiveInt())->goCheck();
+        $products = ProductModel::getProductsByCategoryID($id);
+        if($products->isEmpty()){
             throw new ProductException();
         }
-        return json($products);
+        $products = $products->hidden(['summary']);
+        return $products;
     }
 
     public function getOne($id){
-        (new IDMustBePositiveInt())->goCheck();
+        (new IDMustBePostiveInt())->goCheck();
         $product = ProductModel::getProductDetail($id);
-        if(empty($product)){
+        if(!$product){
             throw new ProductException();
         }
-        return json($product);
+        return $product;
+    }
+
+    public function deleteOne($id){
+        ProductModel::destroy($id);
     }
 }

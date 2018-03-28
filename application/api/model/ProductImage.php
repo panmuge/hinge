@@ -1,9 +1,10 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2018/1/2
- * Time: 22:33
+ * Created by 二虎哥哥.
+ * Author: 二虎哥哥
+ * QQ: 505120790
+ * Date: 2017/5/24
+ * Time: 16:10
  */
 
 namespace app\api\model;
@@ -11,12 +12,9 @@ namespace app\api\model;
 
 class ProductImage extends BaseModel
 {
+    protected $hidden = ['img_id','delete_time','product_id'];
 
-    protected $hidden = ['id','img_id','product_id'];
-
-
-    public function img(){
-        $imgurl = $this->belongsTo('image','img_id','id')->field("id,url,from");
-        return $imgurl;
+    public function imgUrl(){
+        return $this->belongsTo('Image','img_id','id');
     }
 }

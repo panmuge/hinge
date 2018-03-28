@@ -1,9 +1,10 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2017/12/30
- * Time: 22:56
+ * Created by 二虎哥哥.
+ * Author: 二虎哥哥
+ * QQ: 505120790
+ * Date: 2017/5/17
+ * Time: 22:03
  */
 
 namespace app\api\model;
@@ -11,12 +12,10 @@ namespace app\api\model;
 
 class Category extends BaseModel
 {
-    protected $hidden = ["topic_img_id"];
-    public function img(){
-        return $this->belongsTo("Image","topic_img_id","id")->field('id,url,from');
-    }
+    protected $hidden = ['create_time','delete_time','update_time'];
 
-    public static function getCategories(){
-        return self::with(['img'])->field('id,name,topic_img_id')->select();
+    public function img()
+    {
+        return $this->belongsTo('Image', 'topic_img_id', 'id');
     }
 }

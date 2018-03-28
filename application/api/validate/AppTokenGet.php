@@ -3,16 +3,17 @@
  * Created by 二虎哥哥.
  * Author: 二虎哥哥
  * QQ: 505120790
- * Date: 2017/5/17
- * Time: 20:37
+ * Date: 2017/6/18
+ * Time: 18:04
  */
 
 namespace app\api\validate;
 
 
-class Count extends BaseValidate
+class AppTokenGet extends BaseValidate
 {
     protected $rule = [
-        'count' => 'isPositiveInteger|between:1,15'
+        'ac' => 'require|isNotEmpty',
+        'se' => 'require|isNotEmpty'
     ];
 }

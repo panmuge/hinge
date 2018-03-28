@@ -9,30 +9,45 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
-use think\Route;
 
+ use think\Route;
 
-//Route::rule("hello/:id","sample/test/hello",'POST');
+ Route::get('api/:version/banner/:id','api/:version.Banner/getBanner');
 
-//Route::rule("api/:version/banner/:id","api/:version.Banner/getBanner","GET");
+ Route::get('api/:version/theme','api/:version.Theme/getSimpleList');
 
-//Route::rule("api/:version/theme","api/:version.Theme/getSimpleList","GET");
+ Route::get('api/:version/theme/:id','api/:version.Theme/getComplexOne');
 
-Route::get("api/:version/banner/:id","api/:version.Banner/getBanner");
+//  Route::get('api/:version/product/recent','api/:version.product/getRecent');
+//  Route::get('api/:version/product/by_category','api/:version.product/getAllProductInCategory');
+// Route::get('api/:version/product/:id','api/:version.product/getOne',[],['id'=>'\d+']);
+ Route::group('api/:version/product',function(){
+    Route::get('/recent','api/:version.product/getRecent');
+    Route::get('/by_category','api/:version.product/getAllProductInCategory');
+    Route::get('/:id','api/:version.product/getOne',[],['id'=>'\d+']);
+ });
 
-Route::get("api/:version/theme","api/:version.Theme/getSimpleList");
+ Route::delete('api/:version/product/:id', 'api/:version.Product/deleteOne');
 
-Route::get("api/:version/theme/:id","api/:version.Theme/getComplexOne");
+ Route::get('api/:version/category/all','api/:version.category/getAllCategories');
 
+ Route::post('api/:version/token/user','api/:version.Token/getToken');
+ Route::post('api/:version/token/verify', 'api/:version.Token/verifyToken');
+ Route::post('api/:version/token/app', 'api/:version.Token/getAppToken');
 
-Route::get("api/:version/product/by_category","api/:version.Product/getAllInCategory");
-Route::get("api/:version/product/:id","api/:version.Product/getOne",[],["id"=>"\d+"]);
-Route::get("api/:version/product/recent","api/:version.Product/getRecent");
+ Route::post('api/:version/address','api/:version.Address/createOrUpdateAddress');
+ Route::get('api/:version/address', 'api/:version.Address/getUserAddress');
 
+ Route::post('api/:version/order','api/:version.Order/placeOrder');
+ Route::get('api/:version/order/:id', 'api/:version.Order/getDetail',[], ['id'=>'\d+']);
+ Route::get('api/:version/order/by_user','api/:version.Order/getSummaryByUser');
+ Route::get('api/:version/order/paginate', 'api/:version.Order/getSummary');
+ Route::put('api/:version/order/delivery', 'api/:version.Order/delivery');
 
-Route::get("api/:version/category/all","api/:version.Category/getAllCategories");
+ Route::post('api/:version/pay/pre_order','api/:version.Pay/getPreOrder');
+ Route::post('api/:version/pay/notify','api/:version.Pay/receiveNotify');
+ Route::post('api/:version/pay/re_notify','api/:version.Pay/redirectNotify');
 
-Route::post("api/:version/Token/user","api/:version.Token/getToken");
 
 
 
