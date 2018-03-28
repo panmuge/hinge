@@ -8,28 +8,14 @@
 // +----------------------------------------------------------------------
 // | Author: NickBai <1902822973@qq.com>
 // +----------------------------------------------------------------------
-namespace app\admin\controller;
-use app\admin\model\NodeModel;
+namespace app\admin\validate;
 
-class Index extends Base
+use think\Validate;
+
+class RoleValidate extends Validate
 {
-    public function index()
-    {
-        // 获取权限菜单
-        $node = new NodeModel();
-        $this->assign([
-            'menu' => $node->getMenu(session('rule'))
-        ]);
+    protected $rule = [
+        ['role_name', 'unique:role', '角色已经存在']
+    ];
 
-        return $this->fetch('/index');
-    }
-
-    /**
-     * 后台默认首页
-     * @return mixed
-     */
-    public function indexPage()
-    {
-        return $this->fetch('index');
-    }
 }

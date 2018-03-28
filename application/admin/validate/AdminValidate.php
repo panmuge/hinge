@@ -8,28 +8,16 @@
 // +----------------------------------------------------------------------
 // | Author: NickBai <1902822973@qq.com>
 // +----------------------------------------------------------------------
-namespace app\admin\controller;
-use app\admin\model\NodeModel;
+namespace app\admin\validate;
 
-class Index extends Base
+use think\Validate;
+
+class AdminValidate extends Validate
 {
-    public function index()
-    {
-        // 获取权限菜单
-        $node = new NodeModel();
-        $this->assign([
-            'menu' => $node->getMenu(session('rule'))
-        ]);
+    protected $rule = [
+        ['userName', 'require', '用户名不能为空'],
+        ['password', 'require', '密码不能为空'],
+        ['code', 'require', '验证码不能为空']
+    ];
 
-        return $this->fetch('/index');
-    }
-
-    /**
-     * 后台默认首页
-     * @return mixed
-     */
-    public function indexPage()
-    {
-        return $this->fetch('index');
-    }
 }

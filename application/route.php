@@ -34,8 +34,5 @@ Route::get("api/:version/category/all","api/:version.Category/getAllCategories")
 
 Route::post("api/:version/Token/user","api/:version.Token/getToken");
 
-return [
-    'admin'   => 'admin/Index/index',
-//    'admin/:id'   => ['Blog/update',['method' => 'post|put'], ['id' => '\d+']],
-];
+
 
