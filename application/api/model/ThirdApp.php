@@ -1,12 +1,10 @@
 <?php
 /**
- * Created by 二虎哥哥.
- * Author: 二虎哥哥
- * QQ: 505120790
- * Date: 2017/6/18
- * Time: 18:10
+ * Created by PhpStorm.
+ * User: Administrator
+ * Date: 2018/1/1
+ * Time: 12:19
  */
-
 namespace app\api\model;
 
 

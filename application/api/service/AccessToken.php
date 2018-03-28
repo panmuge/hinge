@@ -1,11 +1,11 @@
 <?php
 /**
- * Created by 二虎哥哥.
- * Author: 二虎哥哥
- * QQ: 505120790
- * Date: 2017/6/19
- * Time: 10:21
+ * Created by PhpStorm.
+ * User: Administrator
+ * Date: 2017/12/16
+ * Time: 19:01
  */
+
 
 namespace app\api\service;
 

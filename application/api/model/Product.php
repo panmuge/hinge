@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by 二虎哥哥.
- * Author: 二虎哥哥
- * QQ: 505120790
- * Date: 2017/5/12
- * Time: 22:18
- */
 
 namespace app\api\model;
 

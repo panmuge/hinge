@@ -7,6 +7,6 @@
  */
 
 return [
-    "img_prefix"=>"http://tp5.io/images",
+    "img_prefix"=>"http://fuck_tp.io/images",
     "token_expire_in"=>7200
 ];

@@ -1,10 +1,9 @@
 <?php
 /**
- * Created by 二虎哥哥.
- * Author: 二虎哥哥
- * QQ: 505120790
- * Date: 2017/5/28
- * Time: 16:44
+ * Created by PhpStorm.
+ * User: Administrator
+ * Date: 2017/12/17
+ * Time: 22:01
  */
 
 namespace app\api\validate;
