@@ -19,12 +19,12 @@
         <!-- Panel Other -->
         <div class="ibox float-e-margins">
             <div class="ibox-title">
-                <h5>Banner内容列表</h5>
+                <h5>Banner图片列表</h5>
             </div>
             <div class="ibox-content">
                 <div class="form-group clearfix col-sm-1">
-                    {if authCheck('banner/banneritemadd') }
-                    <a href="{:url('banner/banneritemadd/'.{$bannerid})}">
+                    {if authCheck('banner/itemadd') }
+                    <a href="{:url('banner/itemadd','id='.$bannerid)}">
                         <button class="btn btn-outline btn-primary" type="button">添加轮播图</button>
                     </a>
                     {/if}

@@ -5,6 +5,7 @@ use app\admin\model\BannerModel;
 // use app\admin\model\BannerItemModel;
 use app\admin\validate\BannerValidate;
 use app\admin\validate\IDMustBePositiveInt;
+use think\Request;
 class Banner extends Base
 {
     //查询已经存在banner
@@ -103,16 +104,20 @@ class Banner extends Base
         return $this->fetch();
     }
     //添加
-    public function bannerItemAdd()
+    public function itemAdd()
     {
         //验证数据
         (new IDMustBePositiveInt())->goCheck();
         $id = input("param.id");
+        //获取参数
         if(request()->isAjax()){
             
         }
-        var_dump($id);die;
-        // return $this->fetch();
+        $this->assign([
+            "bannerid"=>$id
+        ]);
+        // var_dump($id);die;
+        return $this->fetch();
     }
     //修改
     public function bannerItemEdit()
