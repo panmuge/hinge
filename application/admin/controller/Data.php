@@ -16,7 +16,7 @@ class Data extends Base
     public function index()
     {
         $tables = db()->query('show tables');
-        
+        var_dump($tables);die;
         foreach($tables as $key=>$vo){
             $sql = "select count(0) as alls from " . $vo['Tables_in_' . config('database')['database']];
             $tables[$key]['alls'] = db()->query($sql)['0']['alls'];
@@ -32,6 +32,7 @@ class Data extends Base
             }
 
         }
+        
         $this->assign([
            'tables' => $tables
         ]);

@@ -12,6 +12,7 @@
     <link href="__CSS__/animate.min.css" rel="stylesheet">
     <link href="__CSS__/style.min.css?v=4.1.0" rel="stylesheet">
     <link href="__CSS__/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <link href="__JS__/layui/css/layui.css" rel="stylesheet">
 </head>
 
 <body class="gray-bg">
@@ -23,10 +24,8 @@
             </div>
             <div class="ibox-content">
                 <div class="form-group clearfix col-sm-1">
-                    {if authCheck('banner/itemadd') }
-                    <a href="{:url('banner/itemadd','id='.$bannerid)}">
-                        <button class="btn btn-outline btn-primary" type="button">添加轮播图</button>
-                    </a>
+                    {if authCheck('banner/itemadd')}
+                    <button class="btn btn-outline btn-primary" type="button" id="addBannerItem">添加图片</button>
                     {/if}
                 </div>
                 <!--搜索框开始-->
@@ -64,6 +63,101 @@
     </div>
     <!-- End Panel Other -->
     </div>
+    <!--添加图片-->
+    <div class="ibox-content" id="node_box" style="display: none">
+        <form class="form-horizontal m-t" method="post" action="{:url('banner/banneradd')}" id="addForm">
+            <input type="hidden" name="banner_id" value="{$bannerid}">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">跳转类型：</label>
+                <div class="input-group col-sm-3">
+                    <select class="form-control" name="type" required="" aria-required="true" id="is_menu">
+                        <option value="0">无导向</option>
+                        <option value="1" selected>导向商品</option>
+                        <option value="2">导向专题</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">导向地址ID：</label>
+                <div class="input-group col-sm-7">
+                    <input id="key_word" type="text" class="form-control" name="key_word" required="" aria-required="true">
+                </div>
+            </div>
+                
+            <div class="form-group">
+                <label class="col-sm-3 control-label">图片：</label>
+                <input name="thumbnail" id="thumbnail" type="hidden" />
+                <div class="form-inline">
+                    <div class="input-group col-sm-2">
+                        <button type="button" class="layui-btn" id="test1">
+                            <i class="layui-icon">&#xe67c;</i>上传图片
+                        </button>
+                    </div>
+                    <div class="input-group col-sm-3">
+                        <div id="sm"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-4 col-sm-offset-8">
+                    <button class="btn btn-primary" type="submit">提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!--添加图片-->
+    <!--编辑图片-->
+    <div class="ibox-content" id="edit_box" style="display: none">
+        <form class="form-horizontal m-t" method="post" action="{:url('banner/bannerEdit')}" id="editForm">
+            <input type="hidden" name="id" id="bannerid" value="{{$bannerid}}"/>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">节点名称：</label>
+                <div class="input-group col-sm-7">
+                    <input id="e_node_name" type="text" class="form-control" name="node_name" required="" aria-required="true">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">控制器名：</label>
+                <div class="input-group col-sm-7">
+                    <input id="e_control_name" type="text" class="form-control" name="control_name" required="" aria-required="true" placeholder="全小写">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">方法名：</label>
+                <div class="input-group col-sm-7">
+                    <input id="e_action_name" type="text" class="form-control" name="action_name" required="" aria-required="true" placeholder="全小写">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">是否是菜单项：</label>
+                <div class="input-group col-sm-7">
+                    <select class="form-control" name="is_menu" required="" aria-required="true" id="e_is_menu">
+
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">菜单图标：</label>
+                <div class="input-group col-sm-7">
+                    <input id="e_style" type="text" class="form-control" name="style" placeholder="只有顶级节点需要">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-4 col-sm-offset-8">
+                    <button class="btn btn-primary" type="submit">提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!--编辑图片-->
+
     <script src="__JS__/jquery.min.js?v=2.1.4"></script>
     <script src="__JS__/bootstrap.min.js?v=3.3.6"></script>
     <script src="__JS__/content.min.js?v=1.0.0"></script>
@@ -74,6 +168,8 @@
     <script src="__JS__/plugins/layer/laydate/laydate.js"></script>
     <script src="__JS__/plugins/sweetalert/sweetalert.min.js"></script>
     <script src="__JS__/plugins/layer/layer.min.js"></script>
+    <script src="__JS__/layui/layui.js"></script>
+    <script src="__JS__/jquery.form.js"></script>
     <script type="text/javascript">
         function initTable() {
             //先销毁表格
@@ -120,6 +216,44 @@
 
             //当点击查询按钮的时候执行
             // $("#search").bind("click", initTable);
+            //弹出成
+             $("#addBannerItem").click(function () {
+                $("#control_name").val('#');
+                $("#action_name").val('#');
+                $("#pid").val(0);
+                $("#show_pid").val('顶级节点');
+
+                layui.use('layer', function () {
+                    box = layer.open({
+                        type: 1,
+                        title: '添加图片',
+                        anim: 2,
+                        skin: 'layui-layer-molv', //加上边框
+                        area: ['620px', '300px'], //宽高
+                        content: $('#node_box')
+                    });
+                });
+            });
+
+            // 上传图片
+            layui.use('upload', function () {
+                var upload = layui.upload;
+
+                //执行实例
+                var uploadInst = upload.render({
+                    elem: '#test1' //绑定元素
+                    , url: "{:url('banner/uploadImg')}" //上传接口
+                    , done: function (res) {
+                        //上传完毕回调
+                        $("#thumbnail").val(res.data.src);
+                        $("#sm").html('<img src="' + res.data.src + '" style="width:40px;height: 40px;"/>');
+                    }
+                    , error: function () {
+                        //请求异常回调
+                    }
+                });
+            });
+
         });
 
         function bannerDel(id) {

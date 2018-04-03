@@ -38,6 +38,25 @@ class BannerModel extends BaseModel
     public function getBannerByID($id){
         return self::with(["bannerItem","bannerItem.image"])->find($id);
     }
+    //验证是否存在banner-itme
+    public  function getBannerItemByID($id){
+        $bannerItems = self::with(['bannerItem'])->find($id)->toArray();
+        return $bannerItems['banner_item'];
+    }
+    //删除banner
+    public function delBanner($id){
+        $bannerItem = $this->getBannerItemByID($id);
+        if(empty($bannerItem)){
+            try{
+                $this->where('id', $id)->delete();
+                return msg(1, '', '删除成功');
+            }catch(PDOException $e){
+                return msg(-1, '', $e->getMessage());
+            }
+        }else{
+            return msg(-1, '','请先删除关联图片');
+        }
+    }
     /**
      *添加banner
      **/
