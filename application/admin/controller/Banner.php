@@ -95,7 +95,7 @@ class Banner extends Base
             $selectResult = $data['banner_item'];
             foreach($selectResult as $key=>$vo){
                 $selectResult[$key]['thumbnail'] = '<img src="' . config('seting.img_prefix') .$vo['image']['url'] . '" width="40px" height="40px">';
-                $selectResult[$key]['operate'] = showOperate($this->makeButton($vo['id']));
+                $selectResult[$key]['operate'] = showOperate($this->makeItemButton($vo['id']));
                 $selectResult[$key]['name'] = $data['name'];
             }
             // var_dump($selectResult);die;
@@ -110,6 +110,12 @@ class Banner extends Base
             "bannerid"=>$id,
         ]);
         return $this->fetch();
+    }
+    //编辑
+    public function saveItem(){
+        //验证数据
+        
+        return json([1,2,3,4,5,6,7,8]);
     }
     //添加
     public function itemAdd()
@@ -145,18 +151,39 @@ class Banner extends Base
 
             $file = request()->file('file');
             // 移动到框架应用根目录/public/uploads/ 目录下
-            $info = $file->move(ROOT_PATH . 'public' . DS . 'upload');
+            $info = $file->move(ROOT_PATH . 'public' . DS . 'images');
             if($info){
                 $src =  '/images' . '/' . date('Ymd') . '/' . $info->getFilename();
                 //上传成功保存到image表
                 $image = new ImageModel();
-                $image->addImage($src);
-                return json(msg(0, ['src' => $src], ''));
+                $imgid = $image->addImage($src);
+                return json(msg(0, ['src' => $src,"imgid"=>$imgid], ''));
             }else{
                 // 上传失败获取错误信息
                 return json(msg(-1, '', $file->getError()));
             }
         }
+    }
+    /**
+     *banner item 拼接操作按钮
+     *@param $id
+     *@return array
+     */
+    private function makeItemButton($id){
+        return [
+            '编辑'=>[
+                'auth'=>'banner/banneritem',
+                'href'=>'javascript:editBannerItem('.$id.')',
+                'btnStyle' => 'primary',
+                'icon' => 'fa fa-paste'
+            ],
+            '删除'=>[
+                'auth' => 'banner/bannerdel',
+                'href' => "javascript:bannerDel(" . $id . ")",
+                'btnStyle' => 'danger',
+                'icon' => 'fa fa-trash-o'
+            ]
+        ];
     }
      /**
      * 拼装操作按钮

@@ -21,16 +21,17 @@ class ImageModel extends BaseModel
     public function addImage($src=''){
          try{
             $data = [
-                "src"=>$src,
+                "url"=>$src,
                 "from"=>1
             ];
             $result = $this->save($data);
+            $imgid = $this->id;
             if(false === $result){
                 // 验证失败 输出错误信息
                 return false;
             }else{
 
-                return true;
+                return $imgid;
             }
         }catch (\Exception $e){
             return msg(-2, '', $e->getMessage());

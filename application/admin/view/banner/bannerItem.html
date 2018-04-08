@@ -47,6 +47,7 @@
                     <div class="example">
                         <table id="cusTable">
                             <thead>
+                                <th data-field="id">ID</th>
                                 <th data-field="name">名称</th>
                                 <th data-field="thumbnail">缩略图</th>
                                 <th data-field="type">导向</th>
@@ -67,10 +68,12 @@
     <div class="ibox-content" id="node_box" style="display: none">
         <form class="form-horizontal m-t" method="post" action="{:url('banner/banneradd')}" id="addForm">
             <input type="hidden" name="banner_id" value="{$bannerid}">
+            <input type="hidden" name="type" id="banner_type" value="add">
+            <input type="hidden" name="img_id" value="" id="imgid">
             <div class="form-group">
                 <label class="col-sm-3 control-label">跳转类型：</label>
                 <div class="input-group col-sm-3">
-                    <select class="form-control" name="type" required="" aria-required="true" id="is_menu">
+                    <select class="form-control" name="type" required="" aria-required="true" id="type">
                         <option value="0">无导向</option>
                         <option value="1" selected>导向商品</option>
                         <option value="2">导向专题</option>
@@ -90,7 +93,7 @@
                 <input name="thumbnail" id="thumbnail" type="hidden" />
                 <div class="form-inline">
                     <div class="input-group col-sm-2">
-                        <button type="button" class="layui-btn" id="test1">
+                        <button type="button" class="layui-btn" id="savefile">
                             <i class="layui-icon">&#xe67c;</i>上传图片
                         </button>
                     </div>
@@ -99,64 +102,14 @@
                     </div>
                 </div>
             </div>
-
             <div class="form-group">
                 <div class="col-sm-4 col-sm-offset-8">
-                    <button class="btn btn-primary" type="submit">提交</button>
+                    <button class="btn btn-primary" type="submit" id="saveFormSubmit">提交</button>
                 </div>
             </div>
         </form>
     </div>
-    <!--添加图片-->
-    <!--编辑图片-->
-    <div class="ibox-content" id="edit_box" style="display: none">
-        <form class="form-horizontal m-t" method="post" action="{:url('banner/bannerEdit')}" id="editForm">
-            <input type="hidden" name="id" id="bannerid" value="{{$bannerid}}"/>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">节点名称：</label>
-                <div class="input-group col-sm-7">
-                    <input id="e_node_name" type="text" class="form-control" name="node_name" required="" aria-required="true">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-sm-3 control-label">控制器名：</label>
-                <div class="input-group col-sm-7">
-                    <input id="e_control_name" type="text" class="form-control" name="control_name" required="" aria-required="true" placeholder="全小写">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-sm-3 control-label">方法名：</label>
-                <div class="input-group col-sm-7">
-                    <input id="e_action_name" type="text" class="form-control" name="action_name" required="" aria-required="true" placeholder="全小写">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-sm-3 control-label">是否是菜单项：</label>
-                <div class="input-group col-sm-7">
-                    <select class="form-control" name="is_menu" required="" aria-required="true" id="e_is_menu">
-
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-sm-3 control-label">菜单图标：</label>
-                <div class="input-group col-sm-7">
-                    <input id="e_style" type="text" class="form-control" name="style" placeholder="只有顶级节点需要">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-sm-4 col-sm-offset-8">
-                    <button class="btn btn-primary" type="submit">提交</button>
-                </div>
-            </div>
-        </form>
-    </div>
-    <!--编辑图片-->
+    <!--添加编辑图片-->
 
     <script src="__JS__/jquery.min.js?v=2.1.4"></script>
     <script src="__JS__/bootstrap.min.js?v=3.3.6"></script>
@@ -199,6 +152,7 @@
                     return param;
                 },
                 onLoadSuccess: function (res) {  //加载成功时执行
+                    sessionStorage.setItem("banneritem",JSON.stringify(res));
                     if (111 == res.code) {
                         window.location.reload();
                     }
@@ -209,7 +163,51 @@
                 }
             });
         }
+        //编辑
+        function editBannerItem(id){
+            $("#banner_type").val('edit');
+            var itemdata = getBannerItemByID(id);
+            var status = ["无导向","导向商品","导向专题"];
+            var statuskey = 0;
+            for (let i = 0; i < status.length; i++) {
+                if(status[i]==itemdata.type){
+                    var statuskey = i;
+                }
+            }
+            $("#type").val(statuskey);
+            $("#key_word").val(itemdata.key_word);
+            $("#imgid").val(itemdata.img_id);
+            $("#sm").html('<img src="'+ itemdata.image.url+'" class="img-responsive" alt="Responsive image">');
 
+            layui.use('layer', function () {
+                box = layer.open({
+                    type: 1,
+                    title: '添加图片',
+                    anim: 2,
+                    skin: 'layui-layer-molv', //加上边框
+                    area: ['620px', '375px'], //宽高
+                    content: $('#node_box')
+                });
+            });
+            return false;
+        }
+        //根据id获取数据
+        function getBannerItemByID(id){
+            if(!id){
+                return false;
+            }
+            var data = sessionStorage.getItem("banneritem"),
+            bannerItemData = JSON.parse(data),
+            rows = bannerItemData.rows,
+            len = rows.length;
+            var itemdata = {};
+            for (let i = 0; i < len; i++) {
+                if(rows[i].id==id){
+                    itemdata = rows[i];
+                }
+            }
+            return itemdata;
+        }
         $(document).ready(function () {
             //调用函数，初始化表格
             initTable();
@@ -218,35 +216,50 @@
             // $("#search").bind("click", initTable);
             //弹出成
              $("#addBannerItem").click(function () {
-                $("#control_name").val('#');
-                $("#action_name").val('#');
-                $("#pid").val(0);
-                $("#show_pid").val('顶级节点');
-
+                $("#banner_type").val('add');
+                //清空数据
+                $("#type").val(1);
+                $("#key_word").val('');
+                $("#sm").html('');
                 layui.use('layer', function () {
                     box = layer.open({
                         type: 1,
                         title: '添加图片',
                         anim: 2,
                         skin: 'layui-layer-molv', //加上边框
-                        area: ['620px', '300px'], //宽高
+                        area: ['620px', '375px'], //宽高
                         content: $('#node_box')
                     });
                 });
             });
+            //添加提交
+            $("#saveFormSubmit").click(function(){
+                var type =  $("#banner_type").val();
+                console.log(type);
+                if(type=='edit'){
 
+                }
+                var data = $("#addForm").serialize();
+                save_banner_item(data,function(msg){
+                    console.log(msg);
+                });
+                return false;
+            });
             // 上传图片
             layui.use('upload', function () {
                 var upload = layui.upload;
 
                 //执行实例
                 var uploadInst = upload.render({
-                    elem: '#test1' //绑定元素
+                    elem: '#savefile' //绑定元素
                     , url: "{:url('banner/uploadImg')}" //上传接口
                     , done: function (res) {
+                        console.log(res);
                         //上传完毕回调
                         $("#thumbnail").val(res.data.src);
-                        $("#sm").html('<img src="' + res.data.src + '" style="width:40px;height: 40px;"/>');
+                        $("#imgid").val(res.data.imgid);
+                        // $("#sm").html('<img src="' + res.data.src + '" style="width:400px;height: 400px;"/>');
+                        $("#sm").html('<img src="' + res.data.src + '" class="img-responsive" alt="Responsive image">');
                     }
                     , error: function () {
                         //请求异常回调
@@ -255,7 +268,7 @@
             });
 
         });
-
+        
         function bannerDel(id) {
             layer.confirm('确认删除此管理员?', { icon: 3, title: '提示' }, function (index) {
                 //do something
@@ -274,6 +287,20 @@
                 layer.close(index);
             })
 
+        }
+        //post提交图片数据
+        function save_banner_item(data,callback){
+            
+            $.ajax({
+                url:"{:url('banner/saveItem')}",
+                data: data,
+                type: "POST",
+                async: false,
+                dataType: 'json',
+                success: function (msg) {
+                    callback && callback(msg);
+                }
+            });
         }
     </script>
 </body>
