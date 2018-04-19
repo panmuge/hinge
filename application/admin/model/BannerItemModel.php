@@ -17,22 +17,22 @@ class BannerItemModel extends BaseModel
         ];
         return $status[$value];
     }
-
-    public function getKeyWordAttr($value,$data){
-        $url = "";
-        switch ($data['type']) {
-            case '1':
-                $url = config('setting.product').$value;
-                break;
-            case '2':
-                $url = config('setting.theme').$value;;
-                break;
-            default:
-                $url = "";
-                break;
-        }
-        return $url;
-    }
+    //获取器修改 字段信息
+    // public function getKeyWordAttr($value,$data){
+    //     $url = "";
+    //     switch ($data['type']) {
+    //         case '1':
+    //             $url = config('setting.product').$value;
+    //             break;
+    //         case '2':
+    //             $url = config('setting.theme').$value;;
+    //             break;
+    //         default:
+    //             $url = "";
+    //             break;
+    //     }
+    //     return $url;
+    // }
     //修改器
     // public function setTypeAttr($value,$data){
 
@@ -50,6 +50,50 @@ class BannerItemModel extends BaseModel
     //根据搜索条件获取所有的banneritem数量
     public function getCountBannerItem($where){
         return $this->table('banner_item')->where($where)->count();
+    }
+
+    //添加数据
+    public function addItem($param){
+        $data = [
+            "img_id"=>$param['img_id'],
+            "key_word"=>$param['key_word'],
+            "type"=>$param['type'],
+            "banner_id"=>$param['banner_id']
+        ];
+        try{
+            $result = $this->save($data);
+            if(false === $result){
+                // 验证失败 输出错误信息
+                return msg(-1, '', $this->getError());
+            }else{
+
+                return msg(1, url('banner/index'), '添加Banner成功');
+            }
+        }catch (\Exception $e){
+            return msg(-2, '', $e->getMessage());
+        }
+    }
+    //修改
+    public function put($id,$param){
+        $data = [
+            "img_id"=>$param['img_id'],
+            "key_word"=>$param['key_word'],
+            "type"=>$param['type'],
+            "banner_id"=>$param['banner_id']
+        ];
+        try{
+            $result = $this->save($data, ['id' => $id]);
+
+            if(false === $result){
+                // 验证失败 输出错误信息
+                return msg(-1, '', $this->getError());
+            }else{
+
+                return msg(1, url('articles/index'), '编辑文章成功');
+            }
+        }catch(\Exception $e){
+            return msg(-2, '', $e->getMessage());
+        }
     }
 
 }

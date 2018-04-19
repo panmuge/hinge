@@ -2,9 +2,11 @@
 namespace app\admin\controller;
 
 use app\admin\model\BannerModel;
-// use app\admin\model\BannerItemModel;
+use app\admin\model\BannerItemModel;
 use app\admin\validate\BannerValidate;
 use app\admin\validate\IDMustBePositiveInt;
+use app\admin\validate\BannerItems as BannerItemsValidate;
+
 use app\admin\model\ImageModel;
 use think\Request;
 class Banner extends Base
@@ -114,9 +116,24 @@ class Banner extends Base
     //编辑
     public function saveItem(){
         //验证数据
-        
-        return json([1,2,3,4,5,6,7,8]);
+        (new BannerItemsValidate())->goCheck();
+        $item_id = input("param.item_id");
+        //item_id 不存在添加数据
+        $itemModel = new BannerItemModel();
+        if(empty($item_id)){
+            $params = input("param.");
+            unset($params['item_id']);
+            $result = $itemModel->addItem($params);
+        }else{
+            //存在修改
+            $params = input("param.");
+            unset($params['item_id']);
+            $result = $itemModel->put($item_id,$params);
+        }
+
+        return json($result);
     }
+
     //添加
     public function itemAdd()
     {
@@ -153,11 +170,11 @@ class Banner extends Base
             // 移动到框架应用根目录/public/uploads/ 目录下
             $info = $file->move(ROOT_PATH . 'public' . DS . 'images');
             if($info){
-                $src =  '/images' . '/' . date('Ymd') . '/' . $info->getFilename();
+                $src =  '/' . date('Ymd') . '/' . $info->getFilename();
                 //上传成功保存到image表
                 $image = new ImageModel();
                 $imgid = $image->addImage($src);
-                return json(msg(0, ['src' => $src,"imgid"=>$imgid], ''));
+                return json(msg(0, ['src' => '/images' .$src,"imgid"=>$imgid], ''));
             }else{
                 // 上传失败获取错误信息
                 return json(msg(-1, '', $file->getError()));

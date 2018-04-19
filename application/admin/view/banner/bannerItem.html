@@ -51,7 +51,7 @@
                                 <th data-field="name">名称</th>
                                 <th data-field="thumbnail">缩略图</th>
                                 <th data-field="type">导向</th>
-                                <th data-field="key_word">导向地址</th>
+                                <th data-field="key_word">导向ID</th>
                                 <!-- <th data-field="status">状态</th> -->
                                 <th data-field="operate">操作</th>
                             </thead>
@@ -67,7 +67,8 @@
     <!--添加图片-->
     <div class="ibox-content" id="node_box" style="display: none">
         <form class="form-horizontal m-t" method="post" action="{:url('banner/banneradd')}" id="addForm">
-            <input type="hidden" name="banner_id" value="{$bannerid}">
+            <input type="hidden" name="item_id" value="" id="item_id" >
+            <input type="hidden" name="banner_id" value="{$bannerid}" >
             <input type="hidden" name="type" id="banner_type" value="add">
             <input type="hidden" name="img_id" value="" id="imgid">
             <div class="form-group">
@@ -174,6 +175,7 @@
                     var statuskey = i;
                 }
             }
+            $("#item_id").val(itemdata.id);
             $("#type").val(statuskey);
             $("#key_word").val(itemdata.key_word);
             $("#imgid").val(itemdata.img_id);
@@ -235,13 +237,12 @@
             //添加提交
             $("#saveFormSubmit").click(function(){
                 var type =  $("#banner_type").val();
-                console.log(type);
-                if(type=='edit'){
-
-                }
                 var data = $("#addForm").serialize();
-                save_banner_item(data,function(msg){
-                    console.log(msg);
+                save_banner_item(data,function(res){
+                    if (1 == res.code) {
+                        window.location.reload();
+                    }
+                    layer.msg("加载成功", { time: 1000 });
                 });
                 return false;
             });
@@ -254,7 +255,7 @@
                     elem: '#savefile' //绑定元素
                     , url: "{:url('banner/uploadImg')}" //上传接口
                     , done: function (res) {
-                        console.log(res);
+                        // console.log(res);
                         //上传完毕回调
                         $("#thumbnail").val(res.data.src);
                         $("#imgid").val(res.data.imgid);
