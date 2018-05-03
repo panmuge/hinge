@@ -44,7 +44,7 @@ class Product extends Base
         }
         return $this->fetch();
     }
-    //已经上架商品
+    //已经
     public function sell(){
 
         return $this->fetch();
@@ -56,6 +56,7 @@ class Product extends Base
     //add
     public function productadd(){
         if(request()->isAjax()){
+            //添加商品
 
         }
         return $this->fetch();
