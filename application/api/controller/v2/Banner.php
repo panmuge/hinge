@@ -9,6 +9,7 @@
 namespace app\api\controller\v2;
 
 use app\lib\exception\BannerMissException;
+use app\api\validate\IDMustBePostiveInt;
 
 class Banner
 {
@@ -26,6 +27,9 @@ class Banner
 
     public function getTest()
     {
+        //验证数据
+        (new IDMustBePostiveInt())->goCheck();
+
         return "This is v2 version banner/test";
     }
 
