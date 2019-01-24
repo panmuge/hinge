@@ -23,4 +23,10 @@ class Banner
         return "This is v2 version";
     }
 
+
+    public function getTest()
+    {
+        return "This is v2 version banner/test";
+    }
+
 }
